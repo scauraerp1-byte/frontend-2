@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import api, { formatApiError } from "../lib/api";
 import { GlassCard, Pill, SectionTitle } from "../components/Primitives";
-import { Plus, Phone, MapPin, Loader2, X, MessageCircle, ArrowLeft } from "lucide-react";
+import { Plus, Phone, MapPin, Loader2, X, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import FilterBar from "../components/FilterBar";
 
@@ -54,7 +55,17 @@ export default function Customers() {
         ))}
       </div>
 
-      {showAdd && <CustomerAddModal onClose={() => setShowAdd(false)} onCreated={(c) => { setShowAdd(false); navigate(`/customers/${c.id}`); }} />}
+      {showAdd &&
+        createPortal(
+          <CustomerAddModal
+            onClose={() => setShowAdd(false)}
+            onCreated={(c) => {
+              setShowAdd(false);
+              navigate(`/customers/${c.id}`);
+            }}
+          />,
+          document.body
+        )}
     </div>
   );
 }
@@ -83,34 +94,13 @@ function CustomerAddModal({ onClose, onCreated }) {
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <form
-        onSubmit={submit}
-        className="glass-strong w-full max-w-xl rounded-3xl p-6 max-h-[92vh] overflow-y-auto shadow-2xl"
-        data-testid="customer-form"
-      >
-        <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full p-2 hover:bg-white/10 transition"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
-              <h3 className="font-display text-2xl">Add Customer</h3>
-            </div>
+      <form onSubmit={submit} className="glass-strong w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-6 fade-up" data-testid="customer-form">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
+            <h3 className="font-display text-2xl">Add customer</h3>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full p-2 hover:bg-white/10"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <button type="button" onClick={onClose} className="text-white/50 hover:text-white"><X className="w-5 h-5" /></button>
         </div>
 
         <div className="space-y-3">
