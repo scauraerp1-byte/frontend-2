@@ -82,8 +82,12 @@ function CustomerAddModal({ onClose, onCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm grid place-items-end sm:place-items-center p-0 sm:p-4">
-      <form onSubmit={submit} className="glass-strong w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-6 fade-up" data-testid="customer-form">
+    <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <form
+  onSubmit={submit}
+  className="glass-strong w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-6 fade-up max-h-[90vh] overflow-y-auto"
+  data-testid="customer-form"
+> 
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
@@ -100,12 +104,12 @@ function CustomerAddModal({ onClose, onCreated }) {
 
           <div>
             <span className="text-xs text-white/60 mb-1.5 inline-block">Mobile number *</span>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 w-full">
               <select
                 data-testid="cust-country-code"
                 value={form.country_code}
                 onChange={(e) => setForm({ ...form, country_code: e.target.value })}
-                className="aura-input w-28 sm:w-32"
+                className="aura-input shrink-0 w-24 sm:w-28"
               >
                 {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
               </select>
@@ -117,7 +121,7 @@ function CustomerAddModal({ onClose, onCreated }) {
                 pattern="[0-9\s\-]{6,15}"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/[^\d\s-]/g, "") })}
-                className="aura-input flex-1"
+                className="aura-input flex-1 min-w-0 w-full"
                 placeholder="98765 43210"
               />
             </div>
