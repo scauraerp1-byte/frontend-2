@@ -82,12 +82,12 @@ function CustomerAddModal({ onClose, onCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 overflow-y-auto">
       <form
-  onSubmit={submit}
-  className="glass-strong w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-6 fade-up max-h-[90vh] overflow-y-auto"
-  data-testid="customer-form"
-> 
+        onSubmit={submit}
+        className="glass-strong w-full max-w-lg rounded-3xl p-6 fade-up max-h-[90vh] overflow-y-auto my-auto"
+        data-testid="customer-form"
+      >
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
@@ -104,12 +104,12 @@ function CustomerAddModal({ onClose, onCreated }) {
 
           <div>
             <span className="text-xs text-white/60 mb-1.5 inline-block">Mobile number *</span>
-            <div className="flex items-center gap-2 w-full">
+            <div className="grid grid-cols-[110px_1fr] gap-2 w-full">
               <select
                 data-testid="cust-country-code"
                 value={form.country_code}
                 onChange={(e) => setForm({ ...form, country_code: e.target.value })}
-                className="aura-input shrink-0 w-24 sm:w-28"
+                className="aura-input w-full"
               >
                 {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
               </select>
@@ -118,10 +118,15 @@ function CustomerAddModal({ onClose, onCreated }) {
                 required
                 type="tel"
                 inputMode="numeric"
-                pattern="[0-9\s\-]{6,15}"
+                pattern="[0-9]{6,15}"
                 value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/[^\d\s-]/g, "") })}
-                className="aura-input flex-1 min-w-0 w-full"
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    phone: e.target.value.replace(/\D/g, ""),
+                  })
+                }
+                className="aura-input w-full"
                 placeholder="98765 43210"
               />
             </div>
