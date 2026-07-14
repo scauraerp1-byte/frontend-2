@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api, { formatApiError } from "../lib/api";
 import { GlassCard, Pill, SectionTitle } from "../components/Primitives";
-import { Plus, Phone, MapPin, Loader2, X, MessageCircle } from "lucide-react";
+import { Plus, Phone, MapPin, Loader2, X, MessageCircle, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import FilterBar from "../components/FilterBar";
 
@@ -82,18 +82,35 @@ function CustomerAddModal({ onClose, onCreated }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
       <form
         onSubmit={submit}
-        className="glass-strong w-full max-w-lg rounded-3xl p-6 fade-up max-h-[90vh] overflow-y-auto my-auto"
+        className="glass-strong w-full max-w-xl rounded-3xl p-6 max-h-[92vh] overflow-y-auto shadow-2xl"
         data-testid="customer-form"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
-            <h3 className="font-display text-2xl">Add customer</h3>
+        <div className="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full p-2 hover:bg-white/10 transition"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-[#ebd281]">People</div>
+              <h3 className="font-display text-2xl">Add Customer</h3>
+            </div>
           </div>
-          <button type="button" onClick={onClose} className="text-white/50 hover:text-white"><X className="w-5 h-5" /></button>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full p-2 hover:bg-white/10"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         <div className="space-y-3">
@@ -104,12 +121,12 @@ function CustomerAddModal({ onClose, onCreated }) {
 
           <div>
             <span className="text-xs text-white/60 mb-1.5 inline-block">Mobile number *</span>
-            <div className="grid grid-cols-[110px_1fr] gap-2 w-full">
+            <div className="flex gap-2">
               <select
                 data-testid="cust-country-code"
                 value={form.country_code}
                 onChange={(e) => setForm({ ...form, country_code: e.target.value })}
-                className="aura-input w-full"
+                className="aura-input w-28 sm:w-32"
               >
                 {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.flag} {c.code}</option>)}
               </select>
@@ -118,15 +135,10 @@ function CustomerAddModal({ onClose, onCreated }) {
                 required
                 type="tel"
                 inputMode="numeric"
-                pattern="[0-9]{6,15}"
+                pattern="[0-9\s\-]{6,15}"
                 value={form.phone}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    phone: e.target.value.replace(/\D/g, ""),
-                  })
-                }
-                className="aura-input w-full"
+                onChange={(e) => setForm({ ...form, phone: e.target.value.replace(/[^\d\s-]/g, "") })}
+                className="aura-input flex-1"
                 placeholder="98765 43210"
               />
             </div>
